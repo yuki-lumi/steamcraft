@@ -1,6 +1,7 @@
 package net.yuki.steamcraft;
 
 import net.yuki.steamcraft.registration.SCBlock;
+import net.yuki.steamcraft.registration.SCBlockEntity;
 import net.yuki.steamcraft.registration.SCCreativeTab;
 import org.slf4j.Logger;
 
@@ -70,6 +71,7 @@ public class SteamCraft {
 
         // Register the Deferred Register to the mod event bus so blocks get registered
         SCBlock.BLOCKS.register(modEventBus);
+        SCBlockEntity.BLOCK_ENTITY.register(modEventBus);
         SCCreativeTab.CREATIVE_MODE_TABS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ITEMS.register(modEventBus);
