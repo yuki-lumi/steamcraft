@@ -1,21 +1,34 @@
 package net.yuki.steamcraft.registration;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import net.yuki.steamcraft.block.GeneratorBlock;
-import net.yuki.steamcraft.blockentity.GeneratorBlockEntity;
+import net.yuki.steamcraft.blockentity.GeneratorEntity;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
-import static net.yuki.steamcraft.SteamCraft.MODID;
+import static net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.MOD_ID;
+
+
 
 public class SCBlockEntity {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MODID);
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeneratorBlockEntity>> GENERATOR_ENTITY =
-            BLOCK_ENTITY.register("generator_block_entity", () ->
-                    new BlockEntityType<>(GeneratorBlockEntity::new, Set.of(SCBlock.COAL_GENERATOR.get()), null));
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
+            DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MOD_ID);
+
+    public static final Supplier<BlockEntityType<GeneratorEntity>> GENERATOR_ENTITY = BLOCK_ENTITY_TYPES.register(
+            "generator_entity",
+            // The block entity type, created using a builder.
+            () -> BlockEntityType.Builder.of(
+                            // The supplier to use for constructing the block entity instances.
+                            GeneratorEntity::new,
+                            // A vararg of blocks that can have this block entity.
+                            // This assumes the existence of the referenced blocks as DeferredBlock<Block>s.
+                            SCBlock.COAL_GENERATOR.get()
+                    )
+                    // Build using null; vanilla does some datafixer shenanigans with the parameter that we don't need.
+                    .build(null)
+    );
 }
