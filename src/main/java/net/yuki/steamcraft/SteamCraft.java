@@ -1,9 +1,6 @@
 package net.yuki.steamcraft;
 
-import net.yuki.steamcraft.registration.SCBlock;
-import net.yuki.steamcraft.registration.SCCapability;
-import net.yuki.steamcraft.registration.SCCreativeTab;
-import net.yuki.steamcraft.registration.SCMenu;
+import net.yuki.steamcraft.registration.*;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -63,13 +60,13 @@ public class SteamCraft {
 
         // Register the Deferred Register to the mod event bus so blocks get registered
         SCBlock.BLOCKS.register(modEventBus);
+        SCBlockEntity.register(modEventBus);
         modEventBus.register(SCCapability.class);
         SCCreativeTab.CREATIVE_MODE_TABS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so items get registered
         ITEMS.register(modEventBus);
         // Register the Deferred Register to the mod event bus so tabs get registered
         CREATIVE_MODE_TABS.register(modEventBus);
-        SCMenu.MENUS.register(modEventBus);
         // Register ourselves for server and other game events we are interested in.
         // Note that this is necessary if and only if we want *this* class (ExampleMod) to respond directly to events.
         // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.

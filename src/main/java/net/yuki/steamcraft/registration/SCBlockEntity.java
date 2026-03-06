@@ -4,6 +4,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.yuki.steamcraft.blockentity.GeneratorEntity;
@@ -15,20 +16,14 @@ import static net.neoforged.neoforge.internal.versions.neoforge.NeoForgeVersion.
 
 
 public class SCBlockEntity {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, MOD_ID);
 
-    public static final Supplier<BlockEntityType<GeneratorEntity>> GENERATOR_ENTITY = BLOCK_ENTITY_TYPES.register(
-            "generator_entity",
-            // The block entity type, created using a builder.
-            () -> BlockEntityType.Builder.of(
-                            // The supplier to use for constructing the block entity instances.
-                            GeneratorEntity::new,
-                            // A vararg of blocks that can have this block entity.
-                            // This assumes the existence of the referenced blocks as DeferredBlock<Block>s.
-                            SCBlock.COAL_GENERATOR.get()
-                    )
-                    // Build using null; vanilla does some datafixer shenanigans with the parameter that we don't need.
-                    .build(null)
-    );
+    public static final Supplier<BlockEntityType<GeneratorEntity>> GENERATOR_ENTITY =
+            BLOCK_ENTITIES.register("generator_entity", () -> BlockEntityType.Builder.of(
+                    GeneratorEntity::new, SCBlock.COAL_GENERATOR.get()).build(null)
+            );
+    public static void register(IEventBus eventBus) {
+        BLOCK_ENTITIES.register(eventBus);
+    }
 }
